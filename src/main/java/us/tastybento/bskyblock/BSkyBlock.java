@@ -2,6 +2,8 @@ package us.tastybento.bskyblock;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Locale;
@@ -35,9 +37,9 @@ import us.tastybento.bskyblock.util.VaultHelper;
 public class BSkyBlock extends JavaPlugin{
 
     final static String LOCALE_FOLDER = "locales";
-
+    
     private static BSkyBlock plugin;
-
+    
     private HashMap<String, BSBLocale> locales = new HashMap<String, BSBLocale>();
 
     // Databases
@@ -54,7 +56,15 @@ public class BSkyBlock extends JavaPlugin{
     @Override
     public void onEnable(){
         plugin = this;
+        
+        for(Field f : Settings.class.getDeclaredFields()){
+            System.out.println(f.toString());
 
+            for(Annotation a : f.getAnnotations()){
+                System.out.println(a.toString());
+            }
+        }
+        
         // Load configuration and locales. If there are no errors, load the plugin.
         if(PluginConfig.loadPluginConfig(this)){
             // TEMP DEBUG DATABASE
@@ -69,7 +79,7 @@ public class BSkyBlock extends JavaPlugin{
             playersManager = new PlayersManager(this);
             islandsManager = new IslandsManager(this);
             // Only load metrics if set to true in config
-            if(Settings.metrics) metrics = new Metrics(plugin);
+            if(Settings.metrics) metrics = new Metrics(this);
 
             // If metrics are loaded, register the custom data charts
             if(metrics != null){
@@ -225,14 +235,6 @@ public class BSkyBlock extends JavaPlugin{
                 return BSBDatabase.getDatabase().toString();
             }
         });
-    }
-
-    /**
-     * Returns BSkyBlock object instance
-     * @return BSkyBlock instance
-     */
-    public static BSkyBlock getInstance(){
-        return plugin;
     }
 
     /**

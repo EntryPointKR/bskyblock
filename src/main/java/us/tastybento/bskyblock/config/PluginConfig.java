@@ -1,9 +1,6 @@
 package us.tastybento.bskyblock.config;
 
-import java.util.HashMap;
-
 import us.tastybento.bskyblock.BSkyBlock;
-import us.tastybento.bskyblock.config.NotSetup.ConfigError;
 
 /**
  * Loads the plugin configuration and the locales.
@@ -27,9 +24,6 @@ public class PluginConfig {
             exception.printStackTrace();
         }
         
-        // Initialize the errors list
-        HashMap<ConfigError, Object> errors = new HashMap<ConfigError, Object>();
-        
         //TODO config version
         
         // The order in this file should match the order in config.yml so that it's easy to check that everything is covered
@@ -40,7 +34,6 @@ public class PluginConfig {
         
         loadLocales(plugin);
         Settings.defaultLanguage = plugin.getConfig().getString("general.default-language", "en-US");
-        if(!plugin.getLocales().containsKey(Settings.defaultLanguage)) errors.put(ConfigError.UNKNOWN_LANGUAGE, Settings.defaultLanguage);
         
         Settings.useEconomy = plugin.getConfig().getBoolean("general.use-economy", true);
         Settings.startingMoney = plugin.getConfig().getDouble("general.starting-money", 10.0);
@@ -48,7 +41,6 @@ public class PluginConfig {
         
         // Purge
         Settings.purgeMaxIslandLevel = plugin.getConfig().getInt("general.purge.max-island-level", 50);
-        if(Settings.purgeMaxIslandLevel < 0) errors.put(ConfigError.PURGE_ISLAND_LEVEL_TOO_LOW, Settings.purgeMaxIslandLevel);
         Settings.purgeRemoveUserData = plugin.getConfig().getBoolean("general.purge.remove-user-data", false);
         
         // TODO Database
@@ -70,18 +62,12 @@ public class PluginConfig {
         
         Settings.islandDistance = plugin.getConfig().getInt("world.distance", 200);
         // TODO check if it is the same than before
-        if(Settings.islandDistance % 2 != 0) errors.put(ConfigError.NOT_EVEN_ISLAND_DISTANCE, Settings.islandDistance);
-        if(Settings.islandDistance < 50) errors.put(ConfigError.ISLAND_DISTANCE_TOO_LOW, Settings.islandDistance);
         
         Settings.islandProtectionRange = plugin.getConfig().getInt("world.protection-range", 100);
-        if(Settings.islandProtectionRange % 2 != 0) errors.put(ConfigError.NOT_EVEN_PROTECTION_RANGE, Settings.islandProtectionRange);
-        if(Settings.islandProtectionRange < 0) errors.put(ConfigError.PROTECTION_RANGE_TOO_LOW, Settings.islandProtectionRange);
-        if(Settings.islandProtectionRange > Settings.islandDistance) errors.put(ConfigError.PROTECTION_RANGE_HIGHER_THAN_ISLAND_DISTANCE, Settings.islandProtectionRange);
         
         Settings.startX = plugin.getConfig().getInt("world.start-x", 0);
         Settings.startZ = plugin.getConfig().getInt("world.start-z", 0);
         Settings.islandHeight = plugin.getConfig().getInt("world.island-height", 120);
-        if(Settings.islandHeight < 5) errors.put(ConfigError.ISLAND_HEIGHT_TOO_LOW, Settings.islandHeight);
         Settings.seaHeight = plugin.getConfig().getInt("world.sea-height", 0);
         
         Settings.maxIslands = plugin.getConfig().getInt("world.max-islands", 0);
@@ -92,11 +78,6 @@ public class PluginConfig {
         Settings.netherTrees = plugin.getConfig().getBoolean("world.nether.trees", true);
         Settings.netherRoof = plugin.getConfig().getBoolean("world.nether.roof", true);
         Settings.netherSpawnRadius = plugin.getConfig().getInt("world.nether.spawn-radius", 25);
-        if(!Settings.netherIslands){
-            // If the nether is vanilla
-            if(Settings.netherSpawnRadius < 0) errors.put(ConfigError.NETHER_SPAWN_RADIUS_TOO_LOW, Settings.netherSpawnRadius);
-            if(Settings.netherSpawnRadius > 100) errors.put(ConfigError.NETHER_SPAWN_RADIUS_TOO_HIGH, Settings.netherSpawnRadius);
-        }
         
         // Entities
         
