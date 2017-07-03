@@ -1,5 +1,6 @@
 package us.tastybento.bskyblock.config;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,6 +10,9 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
+import us.tastybento.bskyblock.api.config.annotations.CheckDoubleInRange;
+import us.tastybento.bskyblock.api.config.annotations.CheckIntInRange;
+import us.tastybento.bskyblock.api.config.annotations.ConfigEntry;
 import us.tastybento.bskyblock.database.BSBDatabase.DatabaseType;
 import us.tastybento.bskyblock.database.managers.OfflineHistoryMessages.HistoryMessageType;
 
@@ -17,8 +21,7 @@ import us.tastybento.bskyblock.database.managers.OfflineHistoryMessages.HistoryM
  * @author Tastybento
  */
 public class Settings {
-    /* The settings variables should follow the config order */
-    
+    /* The settings variables order will define the config order. */
 
     // Constants
     // Game Type BSKYBLOCK or ACIDISLAND
@@ -44,54 +47,140 @@ public class Settings {
     // The island command
     public final static String ISLANDCOMMAND = "island";
     // The challenge command
-    public static final String CHALLENGECOMMAND = "asc";
+    public static final String CHALLENGECOMMAND = "bsc";
     // The spawn command (Essentials spawn for example)
     public final static String SPAWNCOMMAND = "spawn";
     // Admin command
-    public static final String ADMINCOMMAND = "asadmin";
+    public static final String ADMINCOMMAND = "bsadmin";
+    
+    // --------------------------------------------------------------------
     
     /*      GENERAL     */
-    public static boolean metrics;
-    public static boolean checkUpdates;
-    public static String defaultLanguage;
-    public static boolean useEconomy;
-    public static double startingMoney;
-    public static boolean useControlPanel;
+    @ConfigEntry(path = "general.metrics")
+    public static boolean metrics = true;
+    
+    @ConfigEntry(path = "general.check-updates")
+    public static boolean checkUpdates = true;
+    
+    @ConfigEntry(path = "general.default-langage")
+    public static String defaultLanguage = "en-US";
+    
+    @ConfigEntry(path = "general.use-economy")
+    public static boolean useEconomy = true;
+    
+    @ConfigEntry(path = "general.starting-money")
+    @CheckDoubleInRange(min = 0.0, max = Double.MAX_VALUE)
+    public static double startingMoney = 10.0;
+    
+    @ConfigEntry(path = "general.use-control-panel")
+    public static boolean useControlPanel = true;
     
     // Purge
-    public static int purgeMaxIslandLevel;
-    public static boolean purgeRemoveUserData;
+    @ConfigEntry(path = "general.purge.max-island-level")
+    public static int purgeMaxIslandLevel = 50;
     
-    // TODO Database 
-    public static int databaseBackupPeriod;
+    @ConfigEntry(path = "general.purge.remove-user-data")
+    public static boolean purgeRemoveUserData = false;
     
-    public static boolean recoverSuperFlat;
-    public static boolean muteDeathMessages;
-    public static boolean ftbAutoActivator;
-    public static boolean allowObsidianScooping;
+    // Database
+    @ConfigEntry(path = "general.database.type")
+    public static DatabaseType databaseType = DatabaseType.FLATFILE;
+    
+    @ConfigEntry(path = "general.database.settings.host")
+    public static String dbHost = "localhost";
+    
+    @ConfigEntry(path = "general.database.settings.port")
+    @CheckIntInRange(min = 1, max = 65535)
+    public static int dbPort = 3306;
+    
+    @ConfigEntry(path = "general.database.settings.name")
+    public static String dbName = "ASkyBlock";
+    
+    @ConfigEntry(path = "general.database.settings.username")
+    public static String dbUsername = "username";
+    
+    @ConfigEntry(path = "general.database.settings.password")
+    public static String dbPassword = "password";
+    
+    @ConfigEntry(path = "general.database.backup-period")
+    @CheckIntInRange(min = 2, max = Integer.MAX_VALUE)
+    public static int databaseBackupPeriod = 5;
+    
+    
+    @ConfigEntry(path = "general.recover-super-flat")
+    public static boolean recoverSuperFlat = false;
+    
+    @ConfigEntry(path = "general.mute-death-messages")
+    public static boolean muteDeathMessages = false;
+    
+    @ConfigEntry(path = "general.FTB-auto-activator")
+    public static boolean ftbAutoActivator = false;
+    
+    @ConfigEntry(path = "general.allow-obsidian-scooping")
+    public static boolean allowObsidianScooping = true;
     
     // Teleport
-    public static boolean fallingAllowTeleport;
-    public static List<String> fallingBlockedCommands;
-    public static boolean acidAllowTeleport;
-    public static List<String> acidBlockedCommands;
+    @ConfigEntry(path = "general.allow-teleport.falling")
+    public static boolean fallingAllowTeleport = true;
+    
+    @ConfigEntry(path = "general.allow-teleport.falling-blocked-commands")
+    public static List<String> fallingBlockedCommands = Arrays.asList("home");
+    
+    @ConfigEntry(path = "general.allow-teleport.acid")
+    public static boolean acidAllowTeleport = true;
+    
+    @ConfigEntry(path = "general.allow-teleport.acid-blocked-commands")
+    public static List<String> acidBlockedCommands = Arrays.asList("home");
+    
+    // --------------------------------------------------------------------
     
     /*      WORLD       */
-    public static String worldName;
-    public static int islandDistance;
-    public static int islandProtectionRange;
-    public static int startX;
-    public static int startZ;
-    public static int seaHeight;
-    public static int islandHeight;
-    public static int maxIslands;
+    @ConfigEntry(path = "world.world-name")
+    public static String worldName = "BSkyBlock";
+    
+    @ConfigEntry(path = "world.distance")
+    @CheckIntInRange(min = 50, max = 1000)
+    public static int islandDistance = 200;
+    
+    @ConfigEntry(path = "world.protection-range")
+    @CheckIntInRange(min = 0, max = 1000)
+    public static int islandProtectionRange = 100;
+    
+    @ConfigEntry(path = "world.start-x")
+    public static int startX = 0;
+    
+    @ConfigEntry(path = "world.start-z")
+    public static int startZ = 0;
+    
+    @ConfigEntry(path = "world.island-height")
+    @CheckIntInRange(min = 5, max = 250)
+    public static int islandHeight = 120;
+    
+    @ConfigEntry(path = "world.sea-height")
+    @CheckIntInRange(min = 0, max = 250)
+    public static int seaHeight = 0;
+    
+    @ConfigEntry(path = "world.max-islands")
+    public static int maxIslands = 0;
     
     // Nether
-    public static boolean netherGenerate;
-    public static boolean netherIslands;
-    public static boolean netherTrees;
-    public static boolean netherRoof;
-    public static int netherSpawnRadius;
+    @ConfigEntry(path = "world.nether.generate")
+    public static boolean netherGenerate = true;
+    
+    @ConfigEntry(path = "world.nether.islands")
+    public static boolean netherIslands = true;
+    
+    @ConfigEntry(path = "world.nether.trees")
+    public static boolean netherTrees = true;
+    
+    @ConfigEntry(path = "world.nether.roof")
+    public static boolean netherRoof = true;
+    
+    @ConfigEntry(path = "world.nether.spawn-radius")
+    @CheckIntInRange(min = 0, max = 100)
+    public static int netherSpawnRadius = 25;
+    
+    //TODO End
     
     // Entities
     public static int spawnLimitMonsters;
@@ -100,20 +189,43 @@ public class Settings {
     public static HashMap<EntityType, Integer> entityLimits;
     public static HashMap<String, Integer> tileEntityLimits;
     
+    @ConfigEntry(path = "world.disable-offline-redstone", experimental = true)
     public static boolean disableOfflineRedstone;
     
     /*      ISLAND      */
-    public static int maxTeamSize;
-    public static int maxHomes;
-    public static int nameMinLength;
-    public static int nameMaxLength;
-    public static int inviteWait;
+    @ConfigEntry(path = "island.default-max-team-size")
+    @CheckIntInRange(min = 1, max = Integer.MAX_VALUE)
+    public static int maxTeamSize = 4;
+    
+    @ConfigEntry(path = "island.default-max-homes")
+    @CheckIntInRange(min = 1, max = Integer.MAX_VALUE)
+    public static int maxHomes = 1;
+    
+    @ConfigEntry(path = "island.name.min-length")
+    @CheckIntInRange(min = 0, max = Integer.MAX_VALUE)
+    public static int nameMinLength = 5;
+    
+    @ConfigEntry(path = "island.name.max-length")
+    @CheckIntInRange(min = 0, max = Integer.MAX_VALUE)
+    public static int nameMaxLength = 20;
+    
+    @ConfigEntry(path = "island.invite-wait")
+    public static int inviteWait = 60;
     
     // Reset
-    public static int resetLimit;
-    public static int resetWait;
-    public static boolean leaversLoseReset;
-    public static boolean kickedKeepInventory;
+    @ConfigEntry(path = "island.reset.reset-limit")
+    public static int resetLimit = -1;
+    
+    @ConfigEntry(path = "island.reset.reset-wait")
+    public static int resetWait = 300;
+    
+    @ConfigEntry(path = "island.reset.leavers-lose-resets")
+    public static boolean leaversLoseResets = true;
+    
+    @ConfigEntry(path = "island.reset.kicked-keep-inventory")
+    public static boolean kickedKeepInventory = false;
+    
+    
     public static boolean onJoinResetMoney;
     public static boolean onJoinResetInventory;
     public static boolean onJoinResetEnderChest;
@@ -190,19 +302,7 @@ public class Settings {
     // TODO added this just to avoid compilation errors, but will be changed in the future
     public static List<HistoryMessageType> historyMessagesTypes;
 
-    // Database settings
-    public static DatabaseType databaseType;
-    public static String dbHost;
-    public static int dbPort;
-    public static String dbName;
-    public static String dbUsername;
-    public static String dbPassword;
-
-    public static boolean createNether;
-
     public static boolean useOwnGenerator;
-
-    public static boolean islandNether;
 
     public static boolean createEnd;
 
