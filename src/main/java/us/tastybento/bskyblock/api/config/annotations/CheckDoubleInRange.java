@@ -14,8 +14,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface CheckDoubleInRange {
     /** @return the minimum possible value, inclusive */
-    double min();
+    double min() default Double.MIN_VALUE;
 
     /** @return the maximum possible value, inclusive */
-    double max();
+    double max() default Double.MAX_VALUE;
 }
