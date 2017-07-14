@@ -69,7 +69,7 @@ public class Settings {
     public static boolean useEconomy = true;
     
     @ConfigEntry(path = "general.starting-money")
-    @CheckDoubleInRange(min = 0.0, max = Double.MAX_VALUE)
+    @CheckDoubleInRange(min = 0.0)
     public static double startingMoney = 10.0;
     
     @ConfigEntry(path = "general.use-control-panel")
@@ -103,7 +103,7 @@ public class Settings {
     public static String dbPassword = "password";
     
     @ConfigEntry(path = "general.database.backup-period")
-    @CheckIntInRange(min = 2, max = Integer.MAX_VALUE)
+    @CheckIntInRange(min = 2)
     public static int databaseBackupPeriod = 5;
     
     
@@ -194,19 +194,19 @@ public class Settings {
     
     /*      ISLAND      */
     @ConfigEntry(path = "island.default-max-team-size")
-    @CheckIntInRange(min = 1, max = Integer.MAX_VALUE)
+    @CheckIntInRange(min = 1)
     public static int maxTeamSize = 4;
     
     @ConfigEntry(path = "island.default-max-homes")
-    @CheckIntInRange(min = 1, max = Integer.MAX_VALUE)
+    @CheckIntInRange(min = 1)
     public static int maxHomes = 1;
     
     @ConfigEntry(path = "island.name.min-length")
-    @CheckIntInRange(min = 0, max = Integer.MAX_VALUE)
+    @CheckIntInRange(min = 1)
     public static int nameMinLength = 5;
     
     @ConfigEntry(path = "island.name.max-length")
-    @CheckIntInRange(min = 0, max = Integer.MAX_VALUE)
+    @CheckIntInRange(mim = 1)
     public static int nameMaxLength = 20;
     
     @ConfigEntry(path = "island.invite-wait")
