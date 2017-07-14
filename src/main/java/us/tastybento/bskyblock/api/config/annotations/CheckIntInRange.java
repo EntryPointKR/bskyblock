@@ -14,8 +14,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface CheckIntInRange {
     /** @return the minimum possible value, inclusive */
-    int min();
+    int min() default Integer.MIN_VALUE;
 
     /** @return the maximum possible value, inclusive */
-    int max();
+    int max() default Integer.MAX_VALUE;
 }
